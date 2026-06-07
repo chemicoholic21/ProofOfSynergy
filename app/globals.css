@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 50% -10%, #1b1533 0%, #0e0b1a 55%);
+  min-height: 100vh;
+}
+
+@keyframes pulseBar {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+.wavebar {
+  animation: pulseBar 0.9s ease-in-out infinite;
+  transform-origin: center;
+}
