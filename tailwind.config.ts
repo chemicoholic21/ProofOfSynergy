@@ -5,9 +5,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#1d1d1f",
-        "ink-soft": "#6e6e73",
-        accent: "#0071e3",
+        ink: "#e9eaf0",
+        "ink-soft": "#888d9c",
+        accent: "#836ef9",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },
