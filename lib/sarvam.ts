@@ -102,6 +102,33 @@ export async function sarvamTranscribe(
   };
 }
 
+/** Sarvam Bulbul TTS. Returns WAV audio bytes for the given text. */
+export async function sarvamTTS(
+  text: string,
+  lang = "en-IN",
+  timeoutMs = 20000
+): Promise<Buffer> {
+  if (!KEY) throw new Error("SARVAM_API_KEY not set");
+  const res = await withTimeout(
+    fetch(`${SARVAM_BASE}/text-to-speech`, {
+      method: "POST",
+      headers: authHeaders({ "content-type": "application/json" }),
+      body: JSON.stringify({
+        text: text.slice(0, 480),
+        target_language_code: lang,
+        model: "bulbul:v2",
+        speaker: "anushka",
+      }),
+    }),
+    timeoutMs
+  );
+  if (!res.ok) throw new Error(`Sarvam TTS ${res.status}: ${await res.text()}`);
+  const data = await res.json();
+  const b64 = data?.audios?.[0];
+  if (!b64) throw new Error("Sarvam TTS: empty audio");
+  return Buffer.from(b64, "base64");
+}
+
 /** Sarvam Parse (OCR). Returns extracted text/markdown from a document. */
 export async function sarvamParse(file: Blob, filename: string, timeoutMs = 25000): Promise<string> {
   if (!KEY) throw new Error("SARVAM_API_KEY not set");

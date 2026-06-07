@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { aggregateConfidence, buildVerdicts, overallScore } from "@/lib/verify";
 import {
@@ -20,6 +20,47 @@ const STATUS_STYLE: Record<string, string> = {
   exaggerated: "text-amber-300 border-amber-400/30 bg-amber-400/[0.08]",
 };
 
+// Speak a question aloud: Sarvam Bulbul TTS, falling back to the browser voice if it fails.
+async function speak(text: string) {
+  try {
+    const res = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (res.ok && res.status !== 204) {
+      const url = URL.createObjectURL(await res.blob());
+      const audio = new Audio(url);
+      await audio.play();
+      audio.onended = () => URL.revokeObjectURL(url);
+      return;
+    }
+    throw new Error("no audio");
+  } catch {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    }
+  }
+}
+
+function SpeakButton({ text }: { text: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <button
+      onClick={async () => {
+        setPlaying(true);
+        await speak(text);
+        setPlaying(false);
+      }}
+      title="Hear question"
+      className="shrink-0 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-sm text-ink-soft transition hover:bg-white/[0.08]"
+    >
+      {playing ? "🔊" : "🔈"}
+    </button>
+  );
+}
+
 export default function Home() {
   const [step, setStep] = useState<Step>("intro");
   const [busy, setBusy] = useState<string | null>(null);
@@ -36,6 +77,15 @@ export default function Home() {
     () => (evaluations.length ? overallScore(aggregateConfidence(evaluations)) : 0),
     [evaluations]
   );
+
+  // Auto speak the first question once the interview opens (best effort; buttons always work).
+  const spokenRef = useRef(false);
+  useEffect(() => {
+    if (step === "interview" && questions.length && !spokenRef.current) {
+      spokenRef.current = true;
+      speak(questions[0].text);
+    }
+  }, [step, questions]);
 
   async function handleUpload(file: File) {
     setBusy("Extracting skills with Sarvam…");
@@ -169,10 +219,11 @@ export default function Home() {
                 <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-sm font-semibold text-accent">
                   {q.id}
                 </span>
-                <div>
+                <div className="flex-1">
                   <p className="font-medium leading-relaxed">{q.text}</p>
                   <p className="mt-1.5 text-xs text-ink-soft">Targets · {q.targetSkill}</p>
                 </div>
+                <SpeakButton text={q.text} />
               </div>
               <VoiceRecorder
                 disabled={!!busy}
