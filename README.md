@@ -18,6 +18,10 @@ Proof of Synergy is a soft skills verification layer for hiring. It is designed 
 <img width="1697" height="927" alt="image" src="https://github.com/user-attachments/assets/a9d0162f-2a81-410b-8c1e-0e13d524347e" />
 
 
+<img width="1919" height="992" alt="Screenshot 2026-06-07 163953" src="https://github.com/user-attachments/assets/b7eb759f-3bfb-4ee7-b2f0-56b8fc4c02f4" />
+
+
+
 
 
 ## 🛠️ Features
