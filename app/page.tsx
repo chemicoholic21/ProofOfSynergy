@@ -15,9 +15,9 @@ import {
 type Step = "intro" | "upload" | "interview" | "results" | "passport";
 
 const STATUS_STYLE: Record<string, string> = {
-  strong: "text-emerald-700 border-emerald-500/30 bg-emerald-500/10",
-  verified: "text-blue-700 border-blue-500/30 bg-blue-500/10",
-  exaggerated: "text-amber-700 border-amber-500/40 bg-amber-500/15",
+  strong: "text-emerald-300 border-emerald-400/30 bg-emerald-400/[0.08]",
+  verified: "text-sky-300 border-sky-400/30 bg-sky-400/[0.08]",
+  exaggerated: "text-amber-300 border-amber-400/30 bg-amber-400/[0.08]",
 };
 
 export default function Home() {
@@ -123,10 +123,9 @@ export default function Home() {
 
       {step === "upload" && (
         <Card>
-          <h2 className="mb-2 text-2xl font-semibold tracking-tight">Upload a resume</h2>
-          <p className="mb-6 text-[15px] leading-relaxed text-ink-soft">
-            PDF, image, or text. We extract skills with Sarvam, then generate questions that test how
-            you think — not what you can recite.
+          <h2 className="mb-2 text-2xl font-semibold">Upload a resume</h2>
+          <p className="mb-6 text-[15px] text-ink-soft">
+            We extract your skills, then ask questions that test how you think.
           </p>
           <label className="block">
             <span className="sr-only">Choose file</span>
@@ -135,7 +134,7 @@ export default function Home() {
               accept=".pdf,.docx,.png,.jpg,.jpeg,.txt"
               disabled={!!busy}
               onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
-              className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-full file:border-0 file:bg-accent file:px-5 file:py-2.5 file:font-medium file:text-white hover:file:bg-[#0077ed]"
+              className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-lg file:border-0 file:bg-accent file:px-5 file:py-2.5 file:font-medium file:text-white"
             />
           </label>
           <button onClick={useSampleResume} disabled={!!busy} className="mt-5 text-[15px] font-medium text-accent">
@@ -147,13 +146,13 @@ export default function Home() {
       {step === "interview" && resume && (
         <div className="flex flex-col gap-4">
           <Card>
-            <h2 className="text-2xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-semibold">
               Interview{resume.name ? ` · ${resume.name}` : ""}
             </h2>
             <p className="mt-1.5 text-[15px] text-ink-soft">
-              Answer out loud in <b className="text-ink">any Indian language</b> — Sarvam transcribes and
+              Answer out loud in <b className="text-ink">any Indian language</b>. Sarvam transcribes and
               detects it.
-              {resume.source === "fallback" && <span className="ml-1 text-amber-600">(demo data)</span>}
+              {resume.source === "fallback" && <span className="ml-1 text-amber-400">(demo data)</span>}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {resume.skills.map((s) => (
@@ -192,15 +191,13 @@ export default function Home() {
         <div className="flex flex-col gap-4">
           <Card>
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight">Skill verification</h2>
+              <h2 className="text-2xl font-semibold">Skill verification</h2>
               <div className="text-right">
-                <div className="text-4xl font-semibold tracking-tight text-accent">{overall}</div>
+                <div className="font-display text-4xl font-semibold text-accent">{overall}</div>
                 <div className="text-xs text-ink-soft">overall confidence</div>
               </div>
             </div>
-            <p className="mt-1.5 text-[15px] text-ink-soft">
-              Claimed level vs. what the interview actually demonstrated — the fraud detector.
-            </p>
+            <p className="mt-1.5 text-[15px] text-ink-soft">Claimed level versus what you demonstrated.</p>
           </Card>
 
           {verdicts.map((v) => (
@@ -225,7 +222,7 @@ export default function Home() {
             <summary className="cursor-pointer font-medium text-ink-soft">Per-question detail & transcripts</summary>
             <div className="mt-3 flex flex-col gap-3">
               {evaluations.map((e) => (
-                <div key={e.questionId} className="border-t border-black/5 pt-3">
+                <div key={e.questionId} className="border-t border-white/10 pt-3">
                   <div className="flex justify-between">
                     <span className="font-medium">{e.targetSkill}</span>
                     <span className="font-mono">{e.score}/100</span>
@@ -262,18 +259,16 @@ function Header({ step }: { step: Step }) {
   return (
     <header className="mb-9">
       <div className="flex items-center gap-2.5">
-        <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white/70 text-lg backdrop-blur" style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.08)" }}>
+        <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/[0.06] text-lg backdrop-blur">
           🛡️
         </span>
         <h1 className="text-[28px] font-semibold tracking-tight">ProofOfSynergy</h1>
       </div>
-      <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-        Portable, on-chain skill reputation on Monad — verified by AI interview, not self-claimed.
-      </p>
+      <p className="mt-2 text-[15px] text-ink-soft">Onchain skill reputation, verified by interview.</p>
       {idx >= 0 && (
         <div className="mt-5 flex gap-1.5">
           {steps.map((s, i) => (
-            <div key={s} className={`h-1 flex-1 rounded-full ${i <= idx ? "bg-accent" : "bg-black/10"}`} />
+            <div key={s} className={`h-1 flex-1 rounded-full ${i <= idx ? "bg-accent" : "bg-white/10"}`} />
           ))}
         </div>
       )}
@@ -284,20 +279,19 @@ function Header({ step }: { step: Step }) {
 function Intro({ onStart }: { onStart: () => void }) {
   return (
     <Card>
-      <h2 className="text-2xl font-semibold leading-snug tracking-tight">
+      <h2 className="text-[26px] font-semibold leading-snug">
         GitHub shows code. LinkedIn shows claims.
         <br />
         We verify what neither can.
       </h2>
       <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-        Upload a resume, answer resume-specific questions out loud in any Indian language, and
-        ProofOfSynergy turns your real demonstrated ability into <b className="text-ink">on-chain skill
-        attestations</b> any app or agent can read — plus a soulbound Skill Passport.
+        Answer voice questions about your resume. We turn real ability into onchain skill
+        attestations and a soulbound passport.
       </p>
       <ul className="mt-5 space-y-2 text-[15px] text-ink-soft">
-        <li className="flex gap-2"><span className="text-accent">›</span> Sarvam: resume OCR, multilingual voice, AI evaluation</li>
-        <li className="flex gap-2"><span className="text-accent">›</span> Monad: permissionless, composable reputation — not a private database</li>
-        <li className="flex gap-2"><span className="text-accent">›</span> Fraud detector: catches an exaggerated claim in ~90s — and notarizes the truth</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Sarvam OCR, voice, evaluation</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Monad reputation any app can read</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Fraud detector flags overclaims</li>
       </ul>
       <button onClick={onStart} className="btn-primary mt-7 px-6 py-3">
         Start →
@@ -313,7 +307,7 @@ function Card({ children }: { children: React.ReactNode }) {
 function Spinner() {
   return (
     <span
-      className="spinner inline-block h-4 w-4 rounded-full border-[2.5px] border-black/15 border-t-accent"
+      className="spinner inline-block h-4 w-4 rounded-full border-[2.5px] border-white/15 border-t-accent"
       aria-hidden
     />
   );
@@ -354,8 +348,8 @@ function Passport({
     <div className="flex flex-col gap-4">
       <Card>
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight text-emerald-600">Skill Passport minted</h2>
-          {!isReal && <span className="text-xs text-amber-600">deploy pending — labelled fallback</span>}
+          <h2 className="text-2xl font-semibold text-emerald-400">Skill Passport minted</h2>
+          {!isReal && <span className="text-xs text-amber-400">deploy pending, labelled fallback</span>}
         </div>
         <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
           <Info label="Candidate">{name}</Info>
@@ -363,7 +357,7 @@ function Passport({
           <Info label="Subject wallet">
             <Mono>{mint.subject}</Mono>
           </Info>
-          <Info label="Passport token">#{mint.tokenId ?? "—"}</Info>
+          <Info label="Passport token">#{mint.tokenId ?? "none"}</Info>
         </div>
 
         <div className="mt-5 space-y-1.5">
@@ -386,21 +380,20 @@ function Passport({
       </Card>
 
       <Card>
-        <h3 className="text-lg font-semibold tracking-tight">Composability demo — why this isn&apos;t a database</h3>
+        <h3 className="text-lg font-semibold">Composability demo</h3>
         <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
-          An <b className="text-ink">unrelated</b> contract (SkillGate) reads this passport&apos;s on-chain
-          reputation and grants a role — no permission from the candidate or from ProofOfSynergy. A private
-          database can&apos;t do this.
+          An <b className="text-ink">unrelated</b> contract reads this passport reputation and grants a
+          role. No permission needed. A database cannot do this.
         </p>
         <button onClick={runGate} disabled={gateBusy} className="btn-primary mt-4">
           {gateBusy ? "Reading chain…" : `Check gate · ${strongSkill?.skill} ≥ 80`}
         </button>
         {gate && (
-          <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-600" : "text-amber-600"}`}>
+          <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-400" : "text-amber-400"}`}>
             {gate.passes
-              ? `✓ Access granted — on-chain confidence ${gate.confidence}% ≥ 80`
-              : `✗ Access denied — confidence ${gate.confidence}% < 80`}
-            {gate.source === "fallback" && " (local logic — contracts not deployed yet)"}
+              ? `✓ Access granted. Onchain confidence ${gate.confidence}% ≥ 80`
+              : `✗ Access denied. Confidence ${gate.confidence}% below 80`}
+            {gate.source === "fallback" && " (local logic, contracts not deployed yet)"}
           </p>
         )}
       </Card>
@@ -441,19 +434,17 @@ function LinkRow({ label, href, value, enabled }: { label: string; href: string;
 function WhyMonad() {
   return (
     <section className="glass-subtle mt-10 p-7 text-[15px] leading-relaxed text-ink-soft">
-      <h3 className="mb-2 text-lg font-semibold tracking-tight text-ink">Why Monad, not Postgres?</h3>
+      <h3 className="mb-2 text-lg font-semibold text-ink">Why Monad, not Postgres?</h3>
       <p>
-        The interview is the mechanism; the <b className="text-ink">attestations are the product</b>. Because
-        they live on Monad, any third party — a DAO, a hiring app, an AI agent — can read a wallet&apos;s
-        verified skill reputation permissionlessly and act on it (see the SkillGate demo). That trustless
-        composability, plus a portable soulbound passport and ERC-8004-aligned reputation, is exactly what a
-        private database cannot provide.
+        The interview is the mechanism. The <b className="text-ink">attestations are the product</b>. Any DAO,
+        app or agent can read a wallet reputation onchain and act on it, shown by SkillGate. A private
+        database cannot.
       </p>
     </section>
   );
 }
 
-const SAMPLE_RESUME_TEXT = `Aarav Sharma — aarav.sharma@example.com
+const SAMPLE_RESUME_TEXT = `Aarav Sharma, aarav.sharma@example.com
 Senior Backend Engineer, FinStack (3 yrs); Software Engineer, Razorpay (2 yrs)
 B.Tech Computer Science, IIT Bombay, 2019
 Skills: Python (expert), AWS (advanced), React (advanced), Kubernetes (advanced)
