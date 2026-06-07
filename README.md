@@ -13,6 +13,9 @@ Proof of Synergy is a [brief description of what your project does]. It is desig
 
 **Live Demo:** [https://proof-of-synergy.vercel.app/](https://proof-of-synergy.vercel.app/)
 
+<img width="1697" height="927" alt="image" src="https://github.com/user-attachments/assets/a9d0162f-2a81-410b-8c1e-0e13d524347e" />
+
+
 
 
 ## 🛠️ Features
