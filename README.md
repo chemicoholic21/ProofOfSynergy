@@ -1,8 +1,11 @@
 # Proof of Synergy
 
-[![Deploy to Vercel](https://vercel.com/button)](https://proof-of-synergy.vercel.app/)
+https://proof-of-synergy.vercel.app/
 
----
+## Demo Video
+
+https://www.loom.com/share/f70bd74190434b4782bc7a00d3908442
+
 
 ## 🚀 Overview
 
@@ -10,7 +13,7 @@ Proof of Synergy is a [brief description of what your project does]. It is desig
 
 **Live Demo:** [https://proof-of-synergy.vercel.app/](https://proof-of-synergy.vercel.app/)
 
----
+
 
 ## 🛠️ Features
 
@@ -18,7 +21,7 @@ Proof of Synergy is a [brief description of what your project does]. It is desig
 - **Feature 2:** Add a short description of another core feature here.
 - **Feature 3:** Add a short description of a unique selling point here.
 
----
+
 
 ## 💻 Tech Stack
 
@@ -29,7 +32,7 @@ Proof of Synergy is a [brief description of what your project does]. It is desig
 | Styling     | Tailwind CSS                     |
 | Deployment  | Vercel                           |
 
----
+
 
 ## 📦 Getting Started
 
