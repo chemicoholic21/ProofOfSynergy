@@ -15,9 +15,9 @@ import {
 type Step = "intro" | "upload" | "interview" | "results" | "passport";
 
 const STATUS_STYLE: Record<string, string> = {
-  strong: "text-emerald-400 border-emerald-500/40 bg-emerald-500/10",
-  verified: "text-sky-400 border-sky-500/40 bg-sky-500/10",
-  exaggerated: "text-amber-400 border-amber-500/40 bg-amber-500/10",
+  strong: "text-emerald-700 border-emerald-500/30 bg-emerald-500/10",
+  verified: "text-blue-700 border-blue-500/30 bg-blue-500/10",
+  exaggerated: "text-amber-700 border-amber-500/40 bg-amber-500/15",
 };
 
 export default function Home() {
@@ -74,7 +74,7 @@ export default function Home() {
     }
     setTranscripts(newTranscripts);
 
-    setBusy("Evaluating answers with Sarvam-M…");
+    setBusy("Evaluating answers with Sarvam…");
     const items = questions.map((q) => ({ question: q, answer: newTranscripts[q.id]?.text ?? "" }));
     const ev = await (
       await fetch("/api/evaluate", {
@@ -109,12 +109,12 @@ export default function Home() {
   const allRecorded = questions.length > 0 && questions.every((q) => answers[q.id]);
 
   return (
-    <main className="mx-auto max-w-3xl px-5 py-10">
+    <main className="mx-auto max-w-3xl px-5 py-12">
       <Header step={step} />
 
       {busy && (
-        <div className="mb-6 flex items-center gap-3 rounded-xl border border-monad-border bg-monad-card/80 px-4 py-3 text-sm text-slate-200">
-          <span className="h-3 w-3 animate-pulse rounded-full bg-monad-purple" />
+        <div className="mb-6 flex items-center gap-3 glass-subtle px-5 py-3.5 text-[15px] text-ink">
+          <Spinner />
           {busy}
         </div>
       )}
@@ -123,19 +123,22 @@ export default function Home() {
 
       {step === "upload" && (
         <Card>
-          <h2 className="mb-2 text-xl font-semibold">1 · Upload a resume</h2>
-          <p className="mb-5 text-sm text-slate-400">
-            PDF / DOCX / image / .txt. We extract skills with Sarvam, then generate questions that
-            test how you think — not what you can recite.
+          <h2 className="mb-2 text-2xl font-semibold tracking-tight">Upload a resume</h2>
+          <p className="mb-6 text-[15px] leading-relaxed text-ink-soft">
+            PDF, image, or text. We extract skills with Sarvam, then generate questions that test how
+            you think — not what you can recite.
           </p>
-          <input
-            type="file"
-            accept=".pdf,.docx,.png,.jpg,.jpeg,.txt"
-            disabled={!!busy}
-            onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
-            className="block w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-monad-purple file:px-4 file:py-2 file:text-white"
-          />
-          <button onClick={useSampleResume} disabled={!!busy} className="mt-4 text-sm text-monad-purple underline">
+          <label className="block">
+            <span className="sr-only">Choose file</span>
+            <input
+              type="file"
+              accept=".pdf,.docx,.png,.jpg,.jpeg,.txt"
+              disabled={!!busy}
+              onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+              className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-full file:border-0 file:bg-accent file:px-5 file:py-2.5 file:font-medium file:text-white hover:file:bg-[#0077ed]"
+            />
+          </label>
+          <button onClick={useSampleResume} disabled={!!busy} className="mt-5 text-[15px] font-medium text-accent">
             or use a sample resume →
           </button>
         </Card>
@@ -144,17 +147,18 @@ export default function Home() {
       {step === "interview" && resume && (
         <div className="flex flex-col gap-4">
           <Card>
-            <h2 className="mb-1 text-xl font-semibold">
-              2 · Interview {resume.name ? `· ${resume.name}` : ""}
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Interview{resume.name ? ` · ${resume.name}` : ""}
             </h2>
-            <p className="text-sm text-slate-400">
-              Answer out loud in <b>any Indian language</b> — Sarvam transcribes & detects it.
-              {resume.source === "fallback" && <span className="ml-1 text-amber-400/70">(demo data)</span>}
+            <p className="mt-1.5 text-[15px] text-ink-soft">
+              Answer out loud in <b className="text-ink">any Indian language</b> — Sarvam transcribes and
+              detects it.
+              {resume.source === "fallback" && <span className="ml-1 text-amber-600">(demo data)</span>}
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               {resume.skills.map((s) => (
-                <span key={s.name} className="rounded-full border border-monad-border bg-black/30 px-3 py-1 text-xs">
-                  {s.name} · <span className="text-slate-400">{s.claimedLevel}</span>
+                <span key={s.name} className="chip">
+                  {s.name} · <span className="text-ink-soft">{s.claimedLevel}</span>
                 </span>
               ))}
             </div>
@@ -162,13 +166,13 @@ export default function Home() {
 
           {questions.map((q) => (
             <Card key={q.id}>
-              <div className="mb-3 flex items-start gap-3">
-                <span className="rounded-md bg-monad-purple/20 px-2 py-0.5 text-sm font-semibold text-monad-purple">
-                  Q{q.id}
+              <div className="mb-4 flex items-start gap-3">
+                <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-sm font-semibold text-accent">
+                  {q.id}
                 </span>
                 <div>
-                  <p className="font-medium">{q.text}</p>
-                  <p className="mt-1 text-xs text-slate-500">Targets: {q.targetSkill}</p>
+                  <p className="font-medium leading-relaxed">{q.text}</p>
+                  <p className="mt-1.5 text-xs text-ink-soft">Targets · {q.targetSkill}</p>
                 </div>
               </div>
               <VoiceRecorder
@@ -178,11 +182,7 @@ export default function Home() {
             </Card>
           ))}
 
-          <button
-            onClick={finishInterview}
-            disabled={!allRecorded || !!busy}
-            className="rounded-xl bg-monad-purple py-3 font-semibold text-white disabled:opacity-40"
-          >
+          <button onClick={finishInterview} disabled={!allRecorded || !!busy} className="btn-primary py-3.5">
             {allRecorded ? "Evaluate my answers →" : "Record all answers to continue"}
           </button>
         </div>
@@ -192,50 +192,47 @@ export default function Home() {
         <div className="flex flex-col gap-4">
           <Card>
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">3 · Skill verification</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Skill verification</h2>
               <div className="text-right">
-                <div className="text-3xl font-bold text-monad-purple">{overall}</div>
-                <div className="text-xs text-slate-500">overall confidence</div>
+                <div className="text-4xl font-semibold tracking-tight text-accent">{overall}</div>
+                <div className="text-xs text-ink-soft">overall confidence</div>
               </div>
             </div>
-            <p className="mt-1 text-sm text-slate-400">
-              Claimed level vs. what the interview actually demonstrated. This is the fraud detector.
+            <p className="mt-1.5 text-[15px] text-ink-soft">
+              Claimed level vs. what the interview actually demonstrated — the fraud detector.
             </p>
           </Card>
 
           {verdicts.map((v) => (
-            <div
-              key={v.skill}
-              className={`rounded-xl border px-4 py-3 ${STATUS_STYLE[v.status]}`}
-            >
+            <div key={v.skill} className={`glass-subtle border px-5 py-4 ${STATUS_STYLE[v.status]}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <span className="font-semibold">{v.skill}</span>
-                  <span className="ml-2 text-xs opacity-70">claimed: {v.claimedLevel}</span>
+                  <span className="ml-2 text-xs opacity-70">claimed · {v.claimedLevel}</span>
                 </div>
                 <div className="text-right">
                   <span className="font-mono text-lg">{v.observedConfidence}%</span>
-                  <span className="ml-2 text-sm font-semibold uppercase tracking-wide">
-                    {v.status === "strong" ? "✅ strong" : v.status === "verified" ? "✓ verified" : "⚠ flagged"}
+                  <span className="ml-2 text-sm font-semibold">
+                    {v.status === "strong" ? "Strong" : v.status === "verified" ? "Verified" : "Flagged"}
                   </span>
                 </div>
               </div>
-              {v.flag && <p className="mt-1 text-sm opacity-90">{v.flag}</p>}
+              {v.flag && <p className="mt-1.5 text-sm opacity-90">{v.flag}</p>}
             </div>
           ))}
 
-          <details className="rounded-xl border border-monad-border bg-monad-card/60 px-4 py-3 text-sm">
-            <summary className="cursor-pointer text-slate-300">Per-question detail & transcripts</summary>
+          <details className="glass-subtle px-5 py-4 text-sm">
+            <summary className="cursor-pointer font-medium text-ink-soft">Per-question detail & transcripts</summary>
             <div className="mt-3 flex flex-col gap-3">
               {evaluations.map((e) => (
-                <div key={e.questionId} className="border-t border-monad-border pt-2">
+                <div key={e.questionId} className="border-t border-black/5 pt-3">
                   <div className="flex justify-between">
                     <span className="font-medium">{e.targetSkill}</span>
                     <span className="font-mono">{e.score}/100</span>
                   </div>
-                  <p className="text-slate-400">{e.feedback}</p>
+                  <p className="text-ink-soft">{e.feedback}</p>
                   {transcripts[e.questionId] && (
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1.5 text-xs text-ink-soft">
                       🗣 {transcripts[e.questionId].language}: “{transcripts[e.questionId].text}”
                     </p>
                   )}
@@ -244,7 +241,7 @@ export default function Home() {
             </div>
           </details>
 
-          <button onClick={handleMint} disabled={!!busy} className="rounded-xl bg-monad-purple py-3 font-semibold text-white disabled:opacity-40">
+          <button onClick={handleMint} disabled={!!busy} className="btn-primary py-3.5">
             Mint Skill Passport on Monad →
           </button>
         </div>
@@ -263,20 +260,20 @@ function Header({ step }: { step: Step }) {
   const steps: Step[] = ["upload", "interview", "results", "passport"];
   const idx = steps.indexOf(step);
   return (
-    <header className="mb-8">
-      <div className="flex items-center gap-2">
-        <span className="text-2xl">🛡️</span>
-        <h1 className="text-2xl font-bold">
-          ProofOfSynergy <span className="text-monad-purple">· AI Skill Passport</span>
-        </h1>
+    <header className="mb-9">
+      <div className="flex items-center gap-2.5">
+        <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white/70 text-lg backdrop-blur" style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.08)" }}>
+          🛡️
+        </span>
+        <h1 className="text-[28px] font-semibold tracking-tight">ProofOfSynergy</h1>
       </div>
-      <p className="mt-1 text-sm text-slate-400">
+      <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
         Portable, on-chain skill reputation on Monad — verified by AI interview, not self-claimed.
       </p>
       {idx >= 0 && (
-        <div className="mt-4 flex gap-1.5">
+        <div className="mt-5 flex gap-1.5">
           {steps.map((s, i) => (
-            <div key={s} className={`h-1 flex-1 rounded ${i <= idx ? "bg-monad-purple" : "bg-monad-border"}`} />
+            <div key={s} className={`h-1 flex-1 rounded-full ${i <= idx ? "bg-accent" : "bg-black/10"}`} />
           ))}
         </div>
       )}
@@ -287,18 +284,22 @@ function Header({ step }: { step: Step }) {
 function Intro({ onStart }: { onStart: () => void }) {
   return (
     <Card>
-      <h2 className="text-xl font-semibold">GitHub shows code. LinkedIn shows claims. We verify what neither can.</h2>
-      <p className="mt-3 text-sm text-slate-300">
+      <h2 className="text-2xl font-semibold leading-snug tracking-tight">
+        GitHub shows code. LinkedIn shows claims.
+        <br />
+        We verify what neither can.
+      </h2>
+      <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
         Upload a resume, answer resume-specific questions out loud in any Indian language, and
-        ProofOfSynergy turns your real demonstrated ability into <b>on-chain skill attestations</b>{" "}
-        any app or agent can read — plus a soulbound Skill Passport.
+        ProofOfSynergy turns your real demonstrated ability into <b className="text-ink">on-chain skill
+        attestations</b> any app or agent can read — plus a soulbound Skill Passport.
       </p>
-      <ul className="mt-4 space-y-1 text-sm text-slate-400">
-        <li>• Sarvam: resume OCR, multilingual voice, AI evaluation</li>
-        <li>• Monad: permissionless, composable reputation (not a private database)</li>
-        <li>• Fraud detector: catches an exaggerated resume claim in ~90s — and notarizes the truth</li>
+      <ul className="mt-5 space-y-2 text-[15px] text-ink-soft">
+        <li className="flex gap-2"><span className="text-accent">›</span> Sarvam: resume OCR, multilingual voice, AI evaluation</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Monad: permissionless, composable reputation — not a private database</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Fraud detector: catches an exaggerated claim in ~90s — and notarizes the truth</li>
       </ul>
-      <button onClick={onStart} className="mt-5 rounded-xl bg-monad-purple px-5 py-3 font-semibold text-white">
+      <button onClick={onStart} className="btn-primary mt-7 px-6 py-3">
         Start →
       </button>
     </Card>
@@ -306,7 +307,16 @@ function Intro({ onStart }: { onStart: () => void }) {
 }
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-2xl border border-monad-border bg-monad-card/80 p-5">{children}</div>;
+  return <div className="glass-card p-7">{children}</div>;
+}
+
+function Spinner() {
+  return (
+    <span
+      className="spinner inline-block h-4 w-4 rounded-full border-[2.5px] border-black/15 border-t-accent"
+      aria-hidden
+    />
+  );
 }
 
 function Passport({
@@ -344,10 +354,10 @@ function Passport({
     <div className="flex flex-col gap-4">
       <Card>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-emerald-400">✅ Skill Passport minted</h2>
-          {!isReal && <span className="text-xs text-amber-400">deploy pending — labelled fallback</span>}
+          <h2 className="text-2xl font-semibold tracking-tight text-emerald-600">Skill Passport minted</h2>
+          {!isReal && <span className="text-xs text-amber-600">deploy pending — labelled fallback</span>}
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+        <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
           <Info label="Candidate">{name}</Info>
           <Info label="Overall confidence">{overall}/100</Info>
           <Info label="Subject wallet">
@@ -356,18 +366,18 @@ function Passport({
           <Info label="Passport token">#{mint.tokenId ?? "—"}</Info>
         </div>
 
-        <div className="mt-4 space-y-1">
+        <div className="mt-5 space-y-1.5">
           {verdicts.map((v) => (
             <div key={v.skill} className="flex justify-between text-sm">
               <span>
                 {v.status === "exaggerated" ? "⚠" : "✓"} {v.skill}
               </span>
-              <span className="font-mono text-slate-400">{v.observedConfidence}%</span>
+              <span className="font-mono text-ink-soft">{v.observedConfidence}%</span>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 flex flex-col gap-2 text-sm">
+        <div className="mt-5 flex flex-col gap-2 text-sm">
           <LinkRow label="Attestation tx" href={`${mint.explorerBase}/tx/${mint.attestTxHash}`} value={mint.attestTxHash} enabled={isReal} />
           <LinkRow label="Passport mint tx" href={`${mint.explorerBase}/tx/${mint.mintTxHash}`} value={mint.mintTxHash} enabled={isReal} />
           <LinkRow label="Registry" href={`${mint.explorerBase}/address/${mint.registryAddress}`} value={mint.registryAddress} enabled={isReal} />
@@ -376,25 +386,26 @@ function Passport({
       </Card>
 
       <Card>
-        <h3 className="font-semibold">🔓 Composability demo — why this isn&apos;t a database</h3>
-        <p className="mt-1 text-sm text-slate-400">
-          An <b>unrelated</b> contract (SkillGate) reads this passport&apos;s on-chain reputation and grants a
-          role — no permission from the candidate or from ProofOfSynergy. A private DB can&apos;t do this.
+        <h3 className="text-lg font-semibold tracking-tight">Composability demo — why this isn&apos;t a database</h3>
+        <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
+          An <b className="text-ink">unrelated</b> contract (SkillGate) reads this passport&apos;s on-chain
+          reputation and grants a role — no permission from the candidate or from ProofOfSynergy. A private
+          database can&apos;t do this.
         </p>
-        <button onClick={runGate} disabled={gateBusy} className="mt-3 rounded-lg bg-monad-purple px-4 py-2 text-sm font-medium text-white disabled:opacity-40">
-          {gateBusy ? "Reading chain…" : `Check gate: "${strongSkill?.skill} ≥ 80"`}
+        <button onClick={runGate} disabled={gateBusy} className="btn-primary mt-4">
+          {gateBusy ? "Reading chain…" : `Check gate · ${strongSkill?.skill} ≥ 80`}
         </button>
         {gate && (
-          <p className={`mt-3 text-sm ${gate.passes ? "text-emerald-400" : "text-amber-400"}`}>
+          <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-600" : "text-amber-600"}`}>
             {gate.passes
-              ? `✅ Access granted — on-chain confidence ${gate.confidence}% ≥ 80`
-              : `🚫 Access denied — confidence ${gate.confidence}% < 80`}
+              ? `✓ Access granted — on-chain confidence ${gate.confidence}% ≥ 80`
+              : `✗ Access denied — confidence ${gate.confidence}% < 80`}
             {gate.source === "fallback" && " (local logic — contracts not deployed yet)"}
           </p>
         )}
       </Card>
 
-      <button onClick={() => location.reload()} className="text-sm text-slate-400 underline">
+      <button onClick={() => location.reload()} className="mx-auto text-[15px] font-medium text-ink-soft">
         ↺ Run another interview
       </button>
     </div>
@@ -404,8 +415,8 @@ function Passport({
 function Info({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
-      <div className="mt-0.5">{children}</div>
+      <div className="text-xs uppercase tracking-wide text-ink-soft">{label}</div>
+      <div className="mt-1">{children}</div>
     </div>
   );
 }
@@ -415,13 +426,13 @@ function Mono({ children }: { children: React.ReactNode }) {
 function LinkRow({ label, href, value, enabled }: { label: string; href: string; value: string; enabled: boolean }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className="text-slate-500">{label}</span>
+      <span className="text-ink-soft">{label}</span>
       {enabled ? (
-        <a href={href} target="_blank" rel="noreferrer" className="truncate font-mono text-xs text-monad-purple underline">
+        <a href={href} target="_blank" rel="noreferrer" className="truncate font-mono text-xs text-accent underline">
           {value}
         </a>
       ) : (
-        <span className="truncate font-mono text-xs text-slate-600">{value}</span>
+        <span className="truncate font-mono text-xs text-ink-soft/60">{value}</span>
       )}
     </div>
   );
@@ -429,14 +440,14 @@ function LinkRow({ label, href, value, enabled }: { label: string; href: string;
 
 function WhyMonad() {
   return (
-    <section className="mt-10 rounded-2xl border border-monad-border bg-black/20 p-5 text-sm text-slate-400">
-      <h3 className="mb-2 font-semibold text-slate-200">Why Monad, not Postgres?</h3>
+    <section className="glass-subtle mt-10 p-7 text-[15px] leading-relaxed text-ink-soft">
+      <h3 className="mb-2 text-lg font-semibold tracking-tight text-ink">Why Monad, not Postgres?</h3>
       <p>
-        The interview is the mechanism; the <b>attestations are the product</b>. Because they live on
-        Monad, any third party — a DAO, a hiring app, an AI agent — can read a wallet&apos;s verified
-        skill reputation permissionlessly and act on it (see the SkillGate demo). That trustless
-        composability, plus a portable soulbound passport and ERC-8004-aligned reputation, is exactly
-        what a private database cannot provide.
+        The interview is the mechanism; the <b className="text-ink">attestations are the product</b>. Because
+        they live on Monad, any third party — a DAO, a hiring app, an AI agent — can read a wallet&apos;s
+        verified skill reputation permissionlessly and act on it (see the SkillGate demo). That trustless
+        composability, plus a portable soulbound passport and ERC-8004-aligned reputation, is exactly what a
+        private database cannot provide.
       </p>
     </section>
   );

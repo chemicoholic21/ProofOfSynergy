@@ -63,35 +63,35 @@ export default function VoiceRecorder({
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-4">
         {!recording ? (
-          <button
-            onClick={start}
-            disabled={disabled}
-            className="rounded-lg bg-monad-purple px-4 py-2 font-medium text-white disabled:opacity-40"
-          >
-            {hasClip ? "↻ Re-record" : "● Record answer"}
+          <button onClick={start} disabled={disabled} className="btn-ghost">
+            {hasClip ? "Re-record" : "Record answer"}
           </button>
         ) : (
-          <button onClick={stop} className="rounded-lg bg-red-500 px-4 py-2 font-medium text-white">
-            ■ Stop
+          <button
+            onClick={stop}
+            className="rounded-full bg-[#ff3b30] px-5 py-2 text-[15px] font-medium text-white transition active:scale-[0.98]"
+            style={{ boxShadow: "0 6px 18px rgba(255,59,48,0.3)" }}
+          >
+            Stop
           </button>
         )}
-        <span className="font-mono text-lg tabular-nums text-slate-300">
+        <span className="font-mono text-lg tabular-nums text-ink-soft">
           {mm}:{ss}
         </span>
         {recording && (
-          <div className="flex h-8 items-end gap-1">
+          <div className="flex h-7 items-end gap-1">
             {[0, 1, 2, 3, 4, 5, 6].map((i) => (
               <span
                 key={i}
-                className="wavebar w-1.5 rounded bg-monad-purple"
+                className="wavebar w-1.5 rounded-full bg-accent"
                 style={{ height: "100%", animationDelay: `${i * 0.08}s` }}
               />
             ))}
           </div>
         )}
-        {hasClip && !recording && <span className="text-sm text-emerald-400">✓ Captured</span>}
+        {hasClip && !recording && <span className="text-sm font-medium text-emerald-600">✓ Captured</span>}
       </div>
-      {error && <p className="text-sm text-amber-400">{error}</p>}
+      {error && <p className="text-sm text-amber-600">{error}</p>}
     </div>
   );
 }

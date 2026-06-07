@@ -5,12 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        monad: {
-          purple: "#836EF9",
-          dark: "#0E0B1A",
-          card: "#171327",
-          border: "#2A2440",
-        },
+        ink: "#1d1d1f",
+        "ink-soft": "#6e6e73",
+        accent: "#0071e3",
       },
     },
   },

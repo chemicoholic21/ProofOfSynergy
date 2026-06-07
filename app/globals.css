@@ -3,12 +3,56 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  --ink: #1d1d1f;
+  --ink-soft: #6e6e73;
+  --accent: #0071e3;
+  color-scheme: light;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color: var(--ink);
 }
 
 body {
-  background: radial-gradient(1200px 600px at 50% -10%, #1b1533 0%, #0e0b1a 55%);
   min-height: 100vh;
+  background-color: #f5f5f7;
+  background-image:
+    radial-gradient(at 12% 12%, rgba(131, 110, 249, 0.28), transparent 45%),
+    radial-gradient(at 88% 8%, rgba(0, 113, 227, 0.22), transparent 42%),
+    radial-gradient(at 78% 88%, rgba(255, 99, 170, 0.18), transparent 46%),
+    radial-gradient(at 18% 82%, rgba(45, 212, 191, 0.16), transparent 46%);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-[28px] border border-white/70 bg-white/55 backdrop-blur-2xl;
+    box-shadow: 0 10px 40px rgba(31, 31, 51, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  .glass-subtle {
+    @apply rounded-3xl border border-white/60 bg-white/40 backdrop-blur-xl;
+  }
+  .btn-primary {
+    @apply rounded-full bg-[#0071e3] px-5 py-2.5 text-[15px] font-medium text-white
+      transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40;
+    box-shadow: 0 6px 18px rgba(0, 113, 227, 0.32);
+  }
+  .btn-primary:hover:not(:disabled) {
+    @apply bg-[#0077ed];
+  }
+  .btn-ghost {
+    @apply rounded-full border border-black/10 bg-white/60 px-4 py-2 text-[15px] font-medium
+      text-[#1d1d1f] backdrop-blur transition hover:bg-white/80 disabled:opacity-40;
+  }
+  .chip {
+    @apply rounded-full border border-black/[0.06] bg-white/65 px-3 py-1 text-xs
+      text-[#1d1d1f] backdrop-blur;
+  }
 }
 
 @keyframes pulseBar {
@@ -18,4 +62,11 @@ body {
 .wavebar {
   animation: pulseBar 0.9s ease-in-out infinite;
   transform-origin: center;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  animation: spin 0.8s linear infinite;
 }
