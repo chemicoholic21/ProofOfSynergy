@@ -30,6 +30,11 @@ Resume says "Kubernetes: advanced". Interview asks Deployment vs StatefulSet. Ca
 • Solidity + Foundry (SkillAttestationRegistry, SkillPassport, SkillGate)
 • Next.js, viem, Tailwind
 
+## Screenshots 
+
+<img width="752" height="864" alt="image" src="https://github.com/user-attachments/assets/d75b803f-9b2c-4ef0-94e8-b83ed91f2c8f" />
+
+
 ## Deployed on Monad Testnet (10143)
 
 Explorer: https://testnet.monadexplorer.com
