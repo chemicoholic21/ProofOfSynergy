@@ -1,33 +1,92 @@
-# Monad Blitz Bangalore Submission Process
+# 🛡️ ProofOfSynergy — AI Skill Passport on Monad
 
-1. Visit the `monad-blitz-bangalore` repo (link here) and fork it.
+**GitHub shows code. LinkedIn shows claims. ProofOfSynergy verifies what neither can.**
 
-![image](https://github.com/user-attachments/assets/ab46b2ea-ee0f-4237-87ef-c33bb1a94749)
+Upload a resume, answer resume-specific questions out loud **in any Indian language**, and
+ProofOfSynergy turns your *demonstrated* ability into **on-chain skill attestations** that any
+app or agent can read — plus a soulbound **Skill Passport**.
 
-2. Give it your project name, a one-liner description, make sure you are forking `main` branch and click `Create Fork`.
+> The interview is the *mechanism*. The passport is the *product*. The **attestations are the
+> blockchain value.**
 
-![image](https://github.com/user-attachments/assets/ffdebab7-c340-4e14-bd3c-36905f1016a3)
+---
 
-3. In your fork you can make all the changes you want, add code of your project, create branches, add information to `README.md`, you can change anything and everything.
+## Why this is Monad-native (not "a database with extra steps")
 
-4. Once you are done with your project and ready for submission, create a pull request.
+The honest test for any blockchain hackathon project: *if you can swap the chain for Postgres in
+10 minutes, it isn't Monad-native.* ProofOfSynergy passes that test because the value isn't
+*writing* attestations — it's that **anyone can read them permissionlessly and act on them.**
 
-![image](https://github.com/user-attachments/assets/58aa7140-55db-49db-9361-332449dbe116)
+- **`SkillAttestationRegistry`** — an ERC-8004-aligned reputation registry. Structured,
+  attributable, permissionlessly-readable skill confidence per wallet.
+- **`SkillPassport`** — a **soulbound** (non-transferable) ERC-721; the portable artifact.
+- **`SkillGate`** — the **"why-not-Postgres" proof**: an *unrelated* third-party contract that
+  grants a role purely by reading on-chain reputation, with **no permission** from the candidate
+  or from ProofOfSynergy. A private database fundamentally cannot offer that trustless
+  composability. This is the demo moment that makes the chain load-bearing.
 
-![image](https://github.com/user-attachments/assets/5c8c61b1-23fd-4177-b06e-e8fca3a61ad4)
+## The killer feature: fraud detection → on-chain truth
 
-5. Make sure you are create a pull request to the right repo `monad-developers/monad-blitz-bangalore`.
+Resume claims *"Kubernetes: advanced."* The interview asks *"Deployment vs StatefulSet?"* and the
+candidate stumbles → observed confidence **34%** → **⚠ flagged** → the *honest* observed
+confidence is what gets attested on-chain. Memorable, and impossible to fake post-hoc.
 
-![image](https://github.com/user-attachments/assets/41774ebc-d64c-43de-b3be-7e46d21bcaba)
+## Sarvam-native AI stack
 
-6. Make sure you see “Able to merge”, when creating a pull request then you can click `Create Pull Request`.
+| Layer | Model |
+|---|---|
+| Resume OCR | **Sarvam Parse** (`/parse`) |
+| Voice → text | **Saarika v2** (`/speech-to-text`) — auto language detection + code-mixing |
+| LLM (parse / generate / evaluate) | **Sarvam-M** (`/v1/chat/completions`) |
 
-![image](https://github.com/user-attachments/assets/b52f5e6f-9091-43af-9025-f2c61a7d1205)
+3-prompt pipeline: **Resume Parsing → Assessment Generation → Candidate Evaluation**. Per-question
+scores are averaged per skill into the observed confidence that becomes each attestation.
 
-7. Give the pull request your project name and a description of the project (describe as much as you can about your project you can even add video demo links) then click `Create pull request`.
+**Every external call degrades silently to realistic demo data** — a judge never sees an error
+screen, even with zero API keys.
 
-![image](https://github.com/user-attachments/assets/9a3cc30a-498f-4d83-9060-adb11f88eff6)
+---
 
-8. Finally verify if you created your pull request correctly by checking the repo on which the pull request is created and the source and destination branch of the pull request!
+## Architecture
 
-![image](https://github.com/user-attachments/assets/b16befcd-2c29-4520-aa70-29883306e85c)
+```
+Resume ─► Sarvam Parse ─► Sarvam-M (parse) ─► skills
+        ─► Sarvam-M (generate) ─► resume-specific questions
+Voice  ─► Saarika STT ─► transcript ─► Sarvam-M (evaluate) ─► per-question score
+        ─► aggregate per skill ─► fraud detector (claimed vs observed)
+        ─► attestBatch() + mint() on Monad ─► Skill Passport + explorer links
+        ─► SkillGate reads reputation ─► access granted/denied (composability proof)
+```
+
+## Run it
+
+```bash
+# 1) Contracts (Foundry)
+cd contracts && forge test               # 5 tests pass
+cp .env.example .env                      # fund DEPLOYER from https://faucet.monad.xyz
+./deploy.sh                               # deploys + pre-seeds demo attestations/passports
+
+# 2) App (Next.js)
+cd .. && npm install
+cp .env.local.example .env.local          # add SARVAM_API_KEY + deployed addresses + DEPLOYER key
+npm run dev                               # http://localhost:3000
+```
+
+Without keys/deploy the full flow still runs end-to-end on graceful fallbacks (mint returns a
+clearly-labelled fallback rather than a fake transaction).
+
+## Project layout
+
+```
+contracts/   Foundry: SkillAttestationRegistry, SkillPassport, SkillGate + tests + deploy.sh
+app/         Next.js App Router pages + API routes (parse/generate/transcribe/evaluate/mint/gate)
+lib/         sarvam, chain (viem), prompts, verify (fraud detector), ipfs, types, fallbackData
+components/  VoiceRecorder
+```
+
+## Status
+
+- ✅ Contracts written, **5/5 tests passing**, deploy+preseed script ready
+- ✅ Full Sarvam-native AI pipeline with silent fallbacks
+- ✅ Fraud detector + SkillGate composability demo + Why-Monad panel
+- ⏳ On-chain deploy pending a funded testnet wallet (one command: `contracts/deploy.sh`)
