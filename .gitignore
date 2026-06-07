@@ -1,0 +1,20 @@
+# env / secrets
+.env
+.env*.local
+contracts/.env
+
+# node
+node_modules/
+.next/
+out/
+dist/
+npm-debug.log*
+
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# misc
+.DS_Store
+*.log
