@@ -84,21 +84,24 @@ lib/         sarvam, chain (viem), prompts, verify (fraud detector), ipfs, types
 components/  VoiceRecorder
 ```
 
-## Deployed (contract.dev sandbox · chain ID 143)
+## Deployed on Monad Testnet (chain ID 10143)
+
+Explorer: https://testnet.monadexplorer.com
 
 | Contract | Address |
 |---|---|
-| SkillAttestationRegistry | `0x899Aa8Ffe37a1e1b10AFfAe60f7Cd447f836C8bf` |
-| SkillPassport | `0x02aA94FF3DFeA9d0ec1E15697a0f2164a1A4F709` |
-| SkillGate | `0xB8b8f015774b68eC31bcfCdADE555D9ec5D00B2F` |
+| SkillAttestationRegistry | [`0x899Aa8Ffe37a1e1b10AFfAe60f7Cd447f836C8bf`](https://testnet.monadexplorer.com/address/0x899Aa8Ffe37a1e1b10AFfAe60f7Cd447f836C8bf) |
+| SkillPassport | [`0x02aA94FF3DFeA9d0ec1E15697a0f2164a1A4F709`](https://testnet.monadexplorer.com/address/0x02aA94FF3DFeA9d0ec1E15697a0f2164a1A4F709) |
+| SkillGate | [`0xB8b8f015774b68eC31bcfCdADE555D9ec5D00B2F`](https://testnet.monadexplorer.com/address/0xB8b8f015774b68eC31bcfCdADE555D9ec5D00B2F) |
 | Trusted attester (ProofOfSynergy) | `0xd82978dAf17C409751D8F92Ed4eAEea09ed55115` |
 
 Pre-seeded demo subjects: `0x…e001` (strong engineer) and `0x…e002` (one exaggerated claim).
+Sample verifiable attestation tx: [`0x7e0e4eb0…ba565f`](https://testnet.monadexplorer.com/tx/0x7e0e4eb0182daa0da7a9b1b56f075921dc59a78d9d80e22f2683bbb987ba565f)
 
 ## Status
 
-- ✅ Contracts deployed + pre-seeded; **5/5 tests passing**
-- ✅ **Real on-chain mint verified**: `attestBatch` + soulbound passport mint return live tx hashes
+- ✅ Contracts deployed to **Monad Testnet (10143)** + pre-seeded; **5/5 tests passing**
+- ✅ **Real on-chain mint verified** on Monad testnet: `attestBatch` + soulbound passport mint return live tx hashes (explorer-verifiable)
 - ✅ SkillGate composability proof live (reads on-chain confidence, grants/denies access)
 - ✅ Full Sarvam-native AI pipeline with silent fallbacks
 - ✅ Fraud detector + Why-Monad panel
