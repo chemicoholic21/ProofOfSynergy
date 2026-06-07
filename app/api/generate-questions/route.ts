@@ -14,11 +14,22 @@ export async function POST(req: NextRequest) {
     skills = (body.skills ?? []) as ResumeSkill[];
     if (!skills.length) throw new Error("no skills");
 
-    const raw = await sarvamChat(QUESTION_GEN_SYSTEM, questionGenUser(skills), { temperature: 0.7 });
+    const raw = await sarvamChat(QUESTION_GEN_SYSTEM, questionGenUser(skills), {
+      temperature: 0.4,
+      maxTokens: 3000,
+    });
     const out = extractJson<{ questions: InterviewQuestion[] }>(raw);
+    // Normalize targetSkill back to an exact resume skill name — the reasoning model sometimes
+    // echoes the full "Spark (Data, claimed advanced)" descriptor, which would break the
+    // fraud-detector's skill matching downstream.
+    const normalize = (raw: string): string => {
+      const low = (raw || "").toLowerCase();
+      const hit = skills.find((s) => low.includes(s.name.toLowerCase()));
+      return hit ? hit.name : skills[0]?.name ?? raw;
+    };
     const questions = (out.questions || [])
       .filter((q) => q.text && q.targetSkill)
-      .map((q, i) => ({ ...q, id: i + 1 }));
+      .map((q, i) => ({ ...q, id: i + 1, targetSkill: normalize(q.targetSkill) }));
     if (!questions.length) throw new Error("no questions");
 
     return NextResponse.json({ questions });

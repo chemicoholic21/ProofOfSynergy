@@ -23,33 +23,56 @@ async function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
 }
 
 /** Sarvam-M chat completion. Returns the assistant message content. */
+async function sarvamChatOnce(
+  system: string,
+  user: string,
+  opts: { temperature?: number; maxTokens?: number; timeoutMs?: number }
+): Promise<string> {
+  const res = await withTimeout(
+    fetch(`${SARVAM_BASE}/v1/chat/completions`, {
+      method: "POST",
+      headers: authHeaders({ "content-type": "application/json" }),
+      body: JSON.stringify({
+        // sarvam-105b is a reasoning model; "/no_think" disables chain-of-thought so the
+        // assistant returns the answer directly in `content` (otherwise it burns the whole
+        // token budget on reasoning and `content` comes back null).
+        model: "sarvam-105b",
+        messages: [
+          { role: "system", content: `${system} /no_think` },
+          { role: "user", content: `${user} /no_think` },
+        ],
+        temperature: opts.temperature ?? 0.4,
+        max_tokens: opts.maxTokens ?? 2500,
+      }),
+    }),
+    opts.timeoutMs ?? 45000
+  );
+  if (!res.ok) throw new Error(`Sarvam chat ${res.status}: ${await res.text()}`);
+  const data = await res.json();
+  let content = data?.choices?.[0]?.message?.content as string | null | undefined;
+  if (content) content = content.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+  if (!content) throw new Error("Sarvam chat: empty content");
+  return content;
+}
+
+/** Sarvam-M chat completion with one retry — the reasoning model occasionally ignores
+ *  /no_think and returns empty content; a single retry makes it reliable. */
 export async function sarvamChat(
   system: string,
   user: string,
   opts: { temperature?: number; maxTokens?: number; timeoutMs?: number } = {}
 ): Promise<string> {
   if (!KEY) throw new Error("SARVAM_API_KEY not set");
-  const res = await withTimeout(
-    fetch(`${SARVAM_BASE}/v1/chat/completions`, {
-      method: "POST",
-      headers: authHeaders({ "content-type": "application/json" }),
-      body: JSON.stringify({
-        model: "sarvam-m",
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-        ],
-        temperature: opts.temperature ?? 0.4,
-        max_tokens: opts.maxTokens ?? 1200,
-      }),
-    }),
-    opts.timeoutMs ?? 25000
-  );
-  if (!res.ok) throw new Error(`Sarvam chat ${res.status}: ${await res.text()}`);
-  const data = await res.json();
-  const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Sarvam chat: empty content");
-  return content as string;
+  try {
+    return await sarvamChatOnce(system, user, opts);
+  } catch (e) {
+    // Retry once at lower temperature with a larger budget.
+    return await sarvamChatOnce(system, user, {
+      ...opts,
+      temperature: Math.min(opts.temperature ?? 0.4, 0.3),
+      maxTokens: Math.max(opts.maxTokens ?? 2500, 3000),
+    });
+  }
 }
 
 /** Saarika STT. Returns transcript + detected language. */
@@ -61,7 +84,7 @@ export async function sarvamTranscribe(
   if (!KEY) throw new Error("SARVAM_API_KEY not set");
   const form = new FormData();
   form.append("file", audio, filename);
-  form.append("model", "saarika:v2");
+  form.append("model", "saarika:v2.5");
   form.append("language_code", "unknown"); // auto-detect + code-mixing
   const res = await withTimeout(
     fetch(`${SARVAM_BASE}/speech-to-text`, {
