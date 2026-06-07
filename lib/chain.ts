@@ -10,13 +10,17 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 
 export const monadTestnet = defineChain({
-  id: 10143,
-  name: "Monad Testnet",
+  id: Number(process.env.NEXT_PUBLIC_CHAIN_ID || 143),
+  name: "Monad (contract.dev sandbox)",
   nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
-  rpcUrls: { default: { http: [process.env.MONAD_RPC_URL || "https://testnet-rpc.monad.xyz"] } },
+  rpcUrls: {
+    default: {
+      http: [process.env.MONAD_RPC_URL || "https://rpc.contract.dev/616bd30af2461a6935c5998c029bfe36"],
+    },
+  },
   blockExplorers: {
     default: {
-      name: "Monad Explorer",
+      name: "Explorer",
       url: process.env.NEXT_PUBLIC_EXPLORER_URL || "https://testnet.monadexplorer.com",
     },
   },
