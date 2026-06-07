@@ -9,7 +9,7 @@ https://www.loom.com/share/f70bd74190434b4782bc7a00d3908442
 
 ## 🚀 Overview
 
-Proof of Synergy is a [brief description of what your project does]. It is designed to [main goal/purpose] and provides a seamless, intuitive experience.
+Proof of Synergy is a soft skills verification layer for hiring. It is designed to test the communication and thinking that GitHub and LinkedIn cannot, and write the result on-chain as portable, composable reputation, and provides a seamless, intuitive experience.
 
 **Live Demo:** [https://proof-of-synergy.vercel.app/](https://proof-of-synergy.vercel.app/)
 
