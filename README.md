@@ -1,76 +1,100 @@
-# ProofOfSynergy
+# Proof of Synergy
 
-AI voice interviews that turn a resume into verifiable skill attestations on Monad.
+[![Deploy to Vercel](https://vercel.com/button)](https://proof-of-synergy.vercel.app/)
 
-## What it does
+---
 
-• Reads a resume and extracts skills (Sarvam OCR + LLM)
-• Generates voice questions from those exact skills
-• Transcribes spoken answers in Indian languages (Saarika)
-• Scores every answer and flags resumes that overclaim
-• Writes the observed skill confidence onto Monad as attestations
-• Mints a soulbound Skill Passport for the wallet
-• Exposes a SkillGate so any other contract can read that reputation
+## 🚀 Overview
 
-## The fraud detector
+Proof of Synergy is a [brief description of what your project does]. It is designed to [main goal/purpose] and provides a seamless, intuitive experience.
 
-Resume says "Kubernetes: advanced". Interview asks Deployment vs StatefulSet. Candidate stumbles. Observed confidence drops to 34 percent, the skill gets flagged, and the honest number is what goes onchain.
+**Live Demo:** [https://proof-of-synergy.vercel.app/](https://proof-of-synergy.vercel.app/)
 
-## Why Monad and not a database
+---
 
-• Attestations are public and anyone can read them
-• Other apps, DAOs and AI agents consume them without asking permission
-• SkillGate proves it: an unrelated contract grants a role purely from onchain confidence
-• A private database cannot offer that
+## 🛠️ Features
 
-## Stack
+- **Feature 1:** Add a short description of a core feature here.
+- **Feature 2:** Add a short description of another core feature here.
+- **Feature 3:** Add a short description of a unique selling point here.
 
-• Sarvam: sarvam 105b (LLM), Saarika v2.5 (speech), Sarvam Parse (OCR)
-• Monad Testnet, chain 10143
-• Solidity + Foundry (SkillAttestationRegistry, SkillPassport, SkillGate)
-• Next.js, viem, Tailwind
+---
 
-## Demo
-https://www.loom.com/share/f70bd74190434b4782bc7a00d3908442
+## 💻 Tech Stack
 
-## Screenshots 
+| Layer       | Technology                      |
+|-------------|----------------------------------|
+| Frontend    | React / Next.js / TypeScript     |
+| Backend     | Node.js / Supabase               |
+| Styling     | Tailwind CSS                     |
+| Deployment  | Vercel                           |
 
-<img width="752" height="864" alt="image" src="https://github.com/user-attachments/assets/d75b803f-9b2c-4ef0-94e8-b83ed91f2c8f" />
+---
 
+## 📦 Getting Started
 
-## Deployed on Monad Testnet (10143)
+To get a local copy up and running, follow these simple steps.
 
-Explorer: https://testnet.monadexplorer.com
+### Prerequisites
 
-• Registry: 0x899Aa8Ffe37a1e1b10AFfAe60f7Cd447f836C8bf
-• Passport: 0x02aA94FF3DFeA9d0ec1E15697a0f2164a1A4F709
-• SkillGate: 0xB8b8f015774b68eC31bcfCdADE555D9ec5D00B2F
-• Sample attestation tx: 0x7e0e4eb0182daa0da7a9b1b56f075921dc59a78d9d80e22f2683bbb987ba565f
+- Node.js installed on your local machine
+- `npm`, `yarn`, or `pnpm`
 
-## Run it
+### Installation
 
-Contracts:
+1. **Clone the repository:**
 
-```
-cd contracts
-forge test
-./deploy.sh
-```
+   ```bash
+   git clone https://github.com/chemicoholic21/ProofOfSynergy.git
+   ```
 
-App:
+2. **Navigate into the project directory:**
 
-```
-npm install
-cp .env.local.example .env.local   # add SARVAM_API_KEY, RPC, deployer key, addresses
-npm run dev
-```
+   ```bash
+   cd ProofOfSynergy
+   ```
 
-Every external call falls back to demo data, so the full flow runs even with no keys.
+3. **Install NPM packages:**
 
-## Flow
+   ```bash
+   npm install
+   ```
 
-1. Upload a resume or use the sample
-2. Record answers by voice
-3. See claimed vs observed per skill
-4. Mint the passport on Monad
-5. Run SkillGate to watch another contract consume the reputation
+4. **Set up your `.env.local` file with the required environment variables:**
+
+   ```env
+   # Add your environment variables here
+   ```
+
+5. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🤝 Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+
+---
+
+## 📫 Contact
+
+**Taniya Souza**
+
+- 🔗 Repository: [github.com/chemicoholic21/ProofOfSynergy](https://github.com/chemicoholic21/ProofOfSynergy/)
+- 🌐 Live Application: [proof-of-synergy.vercel.app](https://proof-of-synergy.vercel.app/)
