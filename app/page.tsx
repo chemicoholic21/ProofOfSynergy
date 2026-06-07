@@ -123,10 +123,9 @@ export default function Home() {
 
       {step === "upload" && (
         <Card>
-          <h2 className="mb-2 text-2xl font-semibold tracking-tight">Upload a resume</h2>
-          <p className="mb-6 text-[15px] leading-relaxed text-ink-soft">
-            PDF, image, or text. We extract skills with Sarvam, then generate questions that test how
-            you think — not what you can recite.
+          <h2 className="mb-2 text-2xl font-semibold">Upload a resume</h2>
+          <p className="mb-6 text-[15px] text-ink-soft">
+            We extract your skills, then ask questions that test how you think.
           </p>
           <label className="block">
             <span className="sr-only">Choose file</span>
@@ -147,11 +146,11 @@ export default function Home() {
       {step === "interview" && resume && (
         <div className="flex flex-col gap-4">
           <Card>
-            <h2 className="text-2xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-semibold">
               Interview{resume.name ? ` · ${resume.name}` : ""}
             </h2>
             <p className="mt-1.5 text-[15px] text-ink-soft">
-              Answer out loud in <b className="text-ink">any Indian language</b> — Sarvam transcribes and
+              Answer out loud in <b className="text-ink">any Indian language</b>. Sarvam transcribes and
               detects it.
               {resume.source === "fallback" && <span className="ml-1 text-amber-600">(demo data)</span>}
             </p>
@@ -192,15 +191,13 @@ export default function Home() {
         <div className="flex flex-col gap-4">
           <Card>
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight">Skill verification</h2>
+              <h2 className="text-2xl font-semibold">Skill verification</h2>
               <div className="text-right">
-                <div className="text-4xl font-semibold tracking-tight text-accent">{overall}</div>
+                <div className="font-display text-4xl font-semibold text-accent">{overall}</div>
                 <div className="text-xs text-ink-soft">overall confidence</div>
               </div>
             </div>
-            <p className="mt-1.5 text-[15px] text-ink-soft">
-              Claimed level vs. what the interview actually demonstrated — the fraud detector.
-            </p>
+            <p className="mt-1.5 text-[15px] text-ink-soft">Claimed level versus what you demonstrated.</p>
           </Card>
 
           {verdicts.map((v) => (
@@ -267,9 +264,7 @@ function Header({ step }: { step: Step }) {
         </span>
         <h1 className="text-[28px] font-semibold tracking-tight">ProofOfSynergy</h1>
       </div>
-      <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-        Portable, on-chain skill reputation on Monad — verified by AI interview, not self-claimed.
-      </p>
+      <p className="mt-2 text-[15px] text-ink-soft">Onchain skill reputation, verified by interview.</p>
       {idx >= 0 && (
         <div className="mt-5 flex gap-1.5">
           {steps.map((s, i) => (
@@ -284,20 +279,19 @@ function Header({ step }: { step: Step }) {
 function Intro({ onStart }: { onStart: () => void }) {
   return (
     <Card>
-      <h2 className="text-2xl font-semibold leading-snug tracking-tight">
+      <h2 className="text-[26px] font-semibold leading-snug">
         GitHub shows code. LinkedIn shows claims.
         <br />
         We verify what neither can.
       </h2>
       <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-        Upload a resume, answer resume-specific questions out loud in any Indian language, and
-        ProofOfSynergy turns your real demonstrated ability into <b className="text-ink">on-chain skill
-        attestations</b> any app or agent can read — plus a soulbound Skill Passport.
+        Answer voice questions about your resume. We turn real ability into onchain skill
+        attestations and a soulbound passport.
       </p>
       <ul className="mt-5 space-y-2 text-[15px] text-ink-soft">
-        <li className="flex gap-2"><span className="text-accent">›</span> Sarvam: resume OCR, multilingual voice, AI evaluation</li>
-        <li className="flex gap-2"><span className="text-accent">›</span> Monad: permissionless, composable reputation — not a private database</li>
-        <li className="flex gap-2"><span className="text-accent">›</span> Fraud detector: catches an exaggerated claim in ~90s — and notarizes the truth</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Sarvam OCR, voice, evaluation</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Monad reputation any app can read</li>
+        <li className="flex gap-2"><span className="text-accent">›</span> Fraud detector flags overclaims</li>
       </ul>
       <button onClick={onStart} className="btn-primary mt-7 px-6 py-3">
         Start →
@@ -354,8 +348,8 @@ function Passport({
     <div className="flex flex-col gap-4">
       <Card>
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight text-emerald-600">Skill Passport minted</h2>
-          {!isReal && <span className="text-xs text-amber-600">deploy pending — labelled fallback</span>}
+          <h2 className="text-2xl font-semibold text-emerald-600">Skill Passport minted</h2>
+          {!isReal && <span className="text-xs text-amber-600">deploy pending, labelled fallback</span>}
         </div>
         <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
           <Info label="Candidate">{name}</Info>
@@ -363,7 +357,7 @@ function Passport({
           <Info label="Subject wallet">
             <Mono>{mint.subject}</Mono>
           </Info>
-          <Info label="Passport token">#{mint.tokenId ?? "—"}</Info>
+          <Info label="Passport token">#{mint.tokenId ?? "none"}</Info>
         </div>
 
         <div className="mt-5 space-y-1.5">
@@ -386,11 +380,10 @@ function Passport({
       </Card>
 
       <Card>
-        <h3 className="text-lg font-semibold tracking-tight">Composability demo — why this isn&apos;t a database</h3>
+        <h3 className="text-lg font-semibold">Composability demo</h3>
         <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
-          An <b className="text-ink">unrelated</b> contract (SkillGate) reads this passport&apos;s on-chain
-          reputation and grants a role — no permission from the candidate or from ProofOfSynergy. A private
-          database can&apos;t do this.
+          An <b className="text-ink">unrelated</b> contract reads this passport reputation and grants a
+          role. No permission needed. A database cannot do this.
         </p>
         <button onClick={runGate} disabled={gateBusy} className="btn-primary mt-4">
           {gateBusy ? "Reading chain…" : `Check gate · ${strongSkill?.skill} ≥ 80`}
@@ -398,9 +391,9 @@ function Passport({
         {gate && (
           <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-600" : "text-amber-600"}`}>
             {gate.passes
-              ? `✓ Access granted — on-chain confidence ${gate.confidence}% ≥ 80`
-              : `✗ Access denied — confidence ${gate.confidence}% < 80`}
-            {gate.source === "fallback" && " (local logic — contracts not deployed yet)"}
+              ? `✓ Access granted. Onchain confidence ${gate.confidence}% ≥ 80`
+              : `✗ Access denied. Confidence ${gate.confidence}% below 80`}
+            {gate.source === "fallback" && " (local logic, contracts not deployed yet)"}
           </p>
         )}
       </Card>
@@ -441,19 +434,17 @@ function LinkRow({ label, href, value, enabled }: { label: string; href: string;
 function WhyMonad() {
   return (
     <section className="glass-subtle mt-10 p-7 text-[15px] leading-relaxed text-ink-soft">
-      <h3 className="mb-2 text-lg font-semibold tracking-tight text-ink">Why Monad, not Postgres?</h3>
+      <h3 className="mb-2 text-lg font-semibold text-ink">Why Monad, not Postgres?</h3>
       <p>
-        The interview is the mechanism; the <b className="text-ink">attestations are the product</b>. Because
-        they live on Monad, any third party — a DAO, a hiring app, an AI agent — can read a wallet&apos;s
-        verified skill reputation permissionlessly and act on it (see the SkillGate demo). That trustless
-        composability, plus a portable soulbound passport and ERC-8004-aligned reputation, is exactly what a
-        private database cannot provide.
+        The interview is the mechanism. The <b className="text-ink">attestations are the product</b>. Any DAO,
+        app or agent can read a wallet reputation onchain and act on it, shown by SkillGate. A private
+        database cannot.
       </p>
     </section>
   );
 }
 
-const SAMPLE_RESUME_TEXT = `Aarav Sharma — aarav.sharma@example.com
+const SAMPLE_RESUME_TEXT = `Aarav Sharma, aarav.sharma@example.com
 Senior Backend Engineer, FinStack (3 yrs); Software Engineer, Razorpay (2 yrs)
 B.Tech Computer Science, IIT Bombay, 2019
 Skills: Python (expert), AWS (advanced), React (advanced), Kubernetes (advanced)
