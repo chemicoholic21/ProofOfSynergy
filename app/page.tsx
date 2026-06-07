@@ -15,9 +15,9 @@ import {
 type Step = "intro" | "upload" | "interview" | "results" | "passport";
 
 const STATUS_STYLE: Record<string, string> = {
-  strong: "text-emerald-700 border-emerald-500/30 bg-emerald-500/10",
-  verified: "text-blue-700 border-blue-500/30 bg-blue-500/10",
-  exaggerated: "text-amber-700 border-amber-500/40 bg-amber-500/15",
+  strong: "text-emerald-300 border-emerald-400/30 bg-emerald-400/[0.08]",
+  verified: "text-sky-300 border-sky-400/30 bg-sky-400/[0.08]",
+  exaggerated: "text-amber-300 border-amber-400/30 bg-amber-400/[0.08]",
 };
 
 export default function Home() {
@@ -134,7 +134,7 @@ export default function Home() {
               accept=".pdf,.docx,.png,.jpg,.jpeg,.txt"
               disabled={!!busy}
               onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
-              className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-full file:border-0 file:bg-accent file:px-5 file:py-2.5 file:font-medium file:text-white hover:file:bg-[#0077ed]"
+              className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-lg file:border-0 file:bg-accent file:px-5 file:py-2.5 file:font-medium file:text-white"
             />
           </label>
           <button onClick={useSampleResume} disabled={!!busy} className="mt-5 text-[15px] font-medium text-accent">
@@ -152,7 +152,7 @@ export default function Home() {
             <p className="mt-1.5 text-[15px] text-ink-soft">
               Answer out loud in <b className="text-ink">any Indian language</b>. Sarvam transcribes and
               detects it.
-              {resume.source === "fallback" && <span className="ml-1 text-amber-600">(demo data)</span>}
+              {resume.source === "fallback" && <span className="ml-1 text-amber-400">(demo data)</span>}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {resume.skills.map((s) => (
@@ -222,7 +222,7 @@ export default function Home() {
             <summary className="cursor-pointer font-medium text-ink-soft">Per-question detail & transcripts</summary>
             <div className="mt-3 flex flex-col gap-3">
               {evaluations.map((e) => (
-                <div key={e.questionId} className="border-t border-black/5 pt-3">
+                <div key={e.questionId} className="border-t border-white/10 pt-3">
                   <div className="flex justify-between">
                     <span className="font-medium">{e.targetSkill}</span>
                     <span className="font-mono">{e.score}/100</span>
@@ -259,7 +259,7 @@ function Header({ step }: { step: Step }) {
   return (
     <header className="mb-9">
       <div className="flex items-center gap-2.5">
-        <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white/70 text-lg backdrop-blur" style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.08)" }}>
+        <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/[0.06] text-lg backdrop-blur">
           🛡️
         </span>
         <h1 className="text-[28px] font-semibold tracking-tight">ProofOfSynergy</h1>
@@ -268,7 +268,7 @@ function Header({ step }: { step: Step }) {
       {idx >= 0 && (
         <div className="mt-5 flex gap-1.5">
           {steps.map((s, i) => (
-            <div key={s} className={`h-1 flex-1 rounded-full ${i <= idx ? "bg-accent" : "bg-black/10"}`} />
+            <div key={s} className={`h-1 flex-1 rounded-full ${i <= idx ? "bg-accent" : "bg-white/10"}`} />
           ))}
         </div>
       )}
@@ -307,7 +307,7 @@ function Card({ children }: { children: React.ReactNode }) {
 function Spinner() {
   return (
     <span
-      className="spinner inline-block h-4 w-4 rounded-full border-[2.5px] border-black/15 border-t-accent"
+      className="spinner inline-block h-4 w-4 rounded-full border-[2.5px] border-white/15 border-t-accent"
       aria-hidden
     />
   );
@@ -348,8 +348,8 @@ function Passport({
     <div className="flex flex-col gap-4">
       <Card>
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-emerald-600">Skill Passport minted</h2>
-          {!isReal && <span className="text-xs text-amber-600">deploy pending, labelled fallback</span>}
+          <h2 className="text-2xl font-semibold text-emerald-400">Skill Passport minted</h2>
+          {!isReal && <span className="text-xs text-amber-400">deploy pending, labelled fallback</span>}
         </div>
         <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
           <Info label="Candidate">{name}</Info>
@@ -389,7 +389,7 @@ function Passport({
           {gateBusy ? "Reading chain…" : `Check gate · ${strongSkill?.skill} ≥ 80`}
         </button>
         {gate && (
-          <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-600" : "text-amber-600"}`}>
+          <p className={`mt-4 text-[15px] font-medium ${gate.passes ? "text-emerald-400" : "text-amber-400"}`}>
             {gate.passes
               ? `✓ Access granted. Onchain confidence ${gate.confidence}% ≥ 80`
               : `✗ Access denied. Confidence ${gate.confidence}% below 80`}

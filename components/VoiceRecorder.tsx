@@ -89,9 +89,9 @@ export default function VoiceRecorder({
             ))}
           </div>
         )}
-        {hasClip && !recording && <span className="text-sm font-medium text-emerald-600">✓ Captured</span>}
+        {hasClip && !recording && <span className="text-sm font-medium text-emerald-400">✓ Captured</span>}
       </div>
-      {error && <p className="text-sm text-amber-600">{error}</p>}
+      {error && <p className="text-sm text-amber-400">{error}</p>}
     </div>
   );
 }
