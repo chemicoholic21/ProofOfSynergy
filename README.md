@@ -2,9 +2,8 @@
 
 https://proof-of-synergy.vercel.app/
 
-## Demo Video
+## Reality
 
-https://www.loom.com/share/f70bd74190434b4782bc7a00d3908442
 <img width="769" height="574" alt="image" src="https://github.com/user-attachments/assets/2d3cabf6-c953-4516-aa23-e86d074b7dfc" />
 
 
