@@ -11,6 +11,7 @@ dist/
 npm-debug.log*
 
 # foundry
+contracts/lib/
 contracts/out/
 contracts/cache/
 contracts/broadcast/
